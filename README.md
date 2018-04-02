@@ -1,5 +1,5 @@
 # Math347_Projects
-A library of prototype algorithms related to material we cover in class. 
+A library of programs and various algorithms related to material we cover in class. 
 
-Current Topics include:
-  Number Theory
+Topics included:
+  Elementary Number Theoru
