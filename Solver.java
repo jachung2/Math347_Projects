@@ -19,6 +19,8 @@ public class Solver {
             runLoop = contPrompt();
         }
         input.close();
+        int[] test = {3, 6, 12};
+        System.out.println(gcd(test));
     }
 	
     /**
@@ -63,40 +65,50 @@ public class Solver {
         System.out.println("---------------------------");
         System.out.println("gcd(" + x + ", " + y + ")=" + gcd);
         System.out.println("---------------------------");
-        if (x < y) {
-            int temp = x;
-            x = y;
-            y = temp;
-            swapped = true;
+        if (x == 0 || y == 0) {
+            System.out.println("Undefined");
+            return;
         }
-        if (c % gcd != 0) {
-            System.out.println("No solution exists");
+        if (x == 1 || y == 1) {
+            x0 = c;
+            y0 = y;
         }
-        Constant currentConstant = constantStack.pop();
-        //Init constants
-        int m = 1;
-        int q = currentConstant.a;
-        currentConstant = constantStack.pop();
-        int n = -currentConstant.q;
-        int a = currentConstant.a;
-        //Substitute using previous equation
-        while (a != x) {
-            int previousm = m;
-            m = n;
-            currentConstant = constantStack.pop();
-            q = currentConstant.b;
-            n = (n * -currentConstant.q) + previousm;
-            a = currentConstant.a;
+        else {
+            if (x < y) {
+                int temp = x;
+                x = y;
+                y = temp;
+                swapped = true;
+            }
+            if (c % gcd != 0) {
+                System.out.println("No solution exists");
+                return;
+            }
+            constantStack.pop();
+            //Init constants
+            int m = 1;
+            Constant currentConstant = constantStack.pop();
+            int n = -currentConstant.q;
+            int a = currentConstant.a;
+            //Substitute using previous equation
+            while (a != x) {
+                int previousm = m;
+                m = n;
+                currentConstant = constantStack.pop();
+                n = (n * -currentConstant.q) + previousm;
+                a = currentConstant.a;
+            }
+            if (swapped) {
+                x0 = n;
+                y0 = m;
+            } else {
+                x0 = m;
+                y0 = n;
+            }
+
+            x0 *= (c / gcd);
+            y0 *= (c / gcd);
         }
-        if (swapped) {
-            x0 = n;
-            y0 = m;
-        } else {
-            x0 = m;
-            y0 = n;
-        }
-        x0 *= (c / gcd);
-        y0 *= (c / gcd);
         //Display solution
         System.out.println("Particular solution:");
         System.out.println("x0=" + x0 + ", y0=" + y0);
@@ -124,6 +136,22 @@ public class Solver {
             b = r;
         }
         return a;
+    }
+
+    /**
+     * Calculate gcd of a list of numbers
+     * @param list the list of numbers to find the gcd of
+     * @return
+     */
+    public static int gcd(int[] list) {
+        if (list.length < 2) {
+            return -1;
+        }
+        int currentGcd = gcd(list[0], list[1]);
+        for(int i = 3; i < list.length; i++) {
+            currentGcd = gcd(currentGcd, list[i]);
+        }
+        return currentGcd;
     }
 
     /**

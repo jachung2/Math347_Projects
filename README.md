@@ -2,4 +2,5 @@
 A library of programs and various algorithms related to material we cover in class. 
 
 Topics included:
-  Elementary Number Theoru
+  Linear Diophantine Equations
+  Chinese Remainder Theorem
